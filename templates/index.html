@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CS2 Web Injector</title>
+    <style>
+        body { font-family: Arial; margin: 40px; background: #222; color: white; }
+        .container { max-width: 600px; margin: 0 auto; }
+        button { background: #28a745; color: white; padding: 15px; border: none; cursor: pointer; }
+        .status { margin-top: 20px; padding: 10px; border-radius: 5px; }
+        .success { background: #28a745; }
+        .error { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CS2 Web Injector</h1>
+        <button onclick="inject()">Запустить инжектор</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        async function inject() {
+            const status = document.getElementById('status');
+            status.className = 'status';
+            status.innerHTML = 'Запуск...';
+            
+            try {
+                const response = await fetch('/api/inject', { method: 'POST' });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    status.className = 'status success';
+                    status.innerHTML = '✅ Инжект запущен! Проверьте игру.';
+                } else {
+                    status.className = 'status error';
+                    status.innerHTML = '❌ Ошибка: ' + result.message;
+                }
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = '❌ Ошибка подключения';
+            }
+        }
+    </script>
+</body>
+</html>
